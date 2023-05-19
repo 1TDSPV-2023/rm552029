@@ -53,6 +53,18 @@ addEventListener("click", (evento)=>{
 
       }
 
+      //usuario que representa os dados que chegam do formulario 
+
+      const usuarioLogado = {
+        nomeUsuarioLogado: userInput.value,
+        senhaUsuarioLogado: passInput.value
+
+      }
+
+      // USUARIO QUE VAI VAI REPRESENTAR OS DADOS VALIDADOS 
+
+      let usuarioValidado = {};
+
       let listaDeUsuariosRecuperada = JSON.parse(localStorage.getItem("listaUser"));
 
       if(evento.target.id == "btnSubmit"){
@@ -60,20 +72,40 @@ addEventListener("click", (evento)=>{
       try{
               listaDeUsuariosRecuperada.forEach((usuario)=>{
 
-                  if(userInput.value == usuario.nomeUsuario && passInput.value == usuario.senhaUsuario){
-                      throw "USUÁRIO VALIDADO!";
+                  if(usuarioLogado.nomeUsuarioLogado == usuario.nomeUsuario && usuarioLogado.senhaUsuarioLogado == usuario.senhaUsuarioLogado){
+                    usuarioValidado =  usuario;
+                    throw "USUÁRIO VALIDADO!";
                   }
               });
 
               throw "USUÁRIO OU SENHA INCORRETOS!";
 
   }catch(msg){
+
+    const msgStatus = document.querySelector("#info");
+
       if(msg == "USUÁRIO VALIDADO!"){
-          //Redirect
+          
+        //cria uma mensagem para o usuario =
+        msgStatus.setAttribute("style","color:#00ff00");
+        msgStatus.innerHTML = '<span><strong>0 usuario ${usuariovalidado.nomeCompleto} realizou o login com SUCESSSO!!</strong></span'
+        
+        // adcionar o objeto de usuario validado no local storage
+
+        localStorage.setItem("user-validado",JSON.stringify(usuarioValidado));
+
+
+        //Redirect
+         setTimeout(() => {
           window.location.href = "../sucesso.html";
+         },3000);
+         
+
 
       }else{
-          console.log("USUÁRIO OU SENHA INCORRETOS!");
+        // criar uma mensagem para o usuario 
+        msgStatus.setAttribute("style","color:#ff0000");
+        msgStatus.innerHTML = 'span><strong>Nome de usuario ou senha inválidos...,/strong></span>'
       }
   }
 
