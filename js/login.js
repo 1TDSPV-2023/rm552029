@@ -1,4 +1,5 @@
 
+// ADICIONE 2 ATRIBUTOS 
 
 //LISTA DE USUÁRIOS
 let listaDeUsuarios = [
@@ -24,7 +25,15 @@ let listaDeUsuarios = [
   {
       nomeCompleto : "Paulo da Selva",
       nomeUsuario : "paulo",
-      senhaUsuario : "123456"
+      senhaUsuario : "123456",
+
+   }
+   ,
+   {  
+      nomeCompleto:"Avatar",
+      nomeUsuario:"avatarzinho",
+      senhaUsuario:"123456"
+
   }
 ];
 
@@ -53,16 +62,13 @@ addEventListener("click", (evento)=>{
 
       }
 
-      //usuario que representa os dados que chegam do formulario 
-
+      //USUÁRIO QUE REPRESENTA OS DADOS QUE CHEGAM DO FORMULÁRIO.
       const usuarioLogado = {
-        nomeUsuarioLogado: userInput.value,
-        senhaUsuarioLogado: passInput.value
-
+          nomeUsuarioLogado : userInput.value,
+          senhaUsuarioLogado: passInput.value
       }
 
-      // USUARIO QUE VAI VAI REPRESENTAR OS DADOS VALIDADOS 
-
+      //USUÁRIO QUEVAI REPRESENTAR OS DADOS VALIDADOS
       let usuarioValidado = {};
 
       let listaDeUsuariosRecuperada = JSON.parse(localStorage.getItem("listaUser"));
@@ -72,9 +78,9 @@ addEventListener("click", (evento)=>{
       try{
               listaDeUsuariosRecuperada.forEach((usuario)=>{
 
-                  if(usuarioLogado.nomeUsuarioLogado == usuario.nomeUsuario && usuarioLogado.senhaUsuarioLogado == usuario.senhaUsuarioLogado){
-                    usuarioValidado =  usuario;
-                    throw "USUÁRIO VALIDADO!";
+                  if(usuarioLogado.nomeUsuarioLogado == usuario.nomeUsuario && usuarioLogado.senhaUsuarioLogado == usuario.senhaUsuario){
+                      usuarioValidado = usuario;
+                      throw "USUÁRIO VALIDADO!";
                   }
               });
 
@@ -82,32 +88,31 @@ addEventListener("click", (evento)=>{
 
   }catch(msg){
 
-    const msgStatus = document.querySelector("#info");
+      const msgStatus = document.querySelector("#info");
 
       if(msg == "USUÁRIO VALIDADO!"){
-          
-        //cria uma mensagem para o usuario =
-        msgStatus.setAttribute("style","color:#00ff00");
-        msgStatus.innerHTML = '<span><strong>0 usuario ${usuariovalidado.nomeCompleto} realizou o login com SUCESSSO!!</strong></span'
+          //Criar uma msg para o usuário
+          msgStatus.setAttribute("style","color:#00ff00");
+          msgStatus.innerHTML = `<span><strong>O usuário ${usuarioValidado.nomeCompleto} realizou o login com SUCESSO!!</strong></span>`
         
-        // adcionar o objeto de usuario validado no local storage
+          //Adicionar o objeto USUÁRIO-VALIDADO no LOCAL-STORAGE
+          localStorage.setItem("user-validado", JSON.stringify(usuarioValidado));
 
-        localStorage.setItem("user-validado",JSON.stringify(usuarioValidado));
+          //CRIANDO A AUTENTICAÇÃO
+          let token = Math.random().toString(16).substring(2)+Math.random().toString(16).substring(2);
+          //Adicionando o token no LOCAL-STORAGE
+          localStorage.setItem("user-token", token);
 
-
-        //Redirect
-         setTimeout(() => {
-          window.location.href = "../sucesso.html";
-         },3000);
-         
-
+          //Redirect
+          setTimeout(()=>{
+              window.location.href = "../sucesso.html";
+          },3000);
 
       }else{
-        // criar uma mensagem para o usuario 
-        msgStatus.setAttribute("style","color:#ff0000");
-        msgStatus.innerHTML = 'span><strong>Nome de usuario ou senha inválidos...,/strong></span>'
+          //Criar uma msg para o usuário
+          msgStatus.setAttribute("style","color:#ff0000");
+          msgStatus.innerHTML = `<span><strong>Nome de usuário ou senha inválidos...</strong></span>`
       }
   }
-
 }
 });
